@@ -1,0 +1,177 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>For Cilla 💖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(#1b2735, #090a0f);
+      color: #fff;
+      font-family: 'Quicksand', sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+    .stars, .twinkling {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -2;
+    }
+    .stars {
+      background: url('https://raw.githubusercontent.com/fakhri294/assets-ku/main/stars.png') repeat;
+    }
+    .twinkling {
+      background: url('https://raw.githubusercontent.com/fakhri294/assets-ku/main/twinkling.png') repeat;
+      animation: moveStars 200s linear infinite;
+    }
+    @keyframes moveStars {
+      from { background-position: 0 0; }
+      to { background-position: -10000px 5000px; }
+    }
+    .emoji-container {
+      font-size: 2.2rem;
+      margin-top: 40px;
+    }
+    .typing-container {
+      margin-top: 30px;
+      font-size: 30px;
+      color: #ffccf9;
+      font-family: 'Pacifico', cursive;
+      min-height: 100px;
+    }
+    #last-btn {
+      margin-top: 40px;
+      padding: 14px 30px;
+      font-size: 18px;
+      border: none;
+      background: #c084fc;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: 'Quicksand', sans-serif;
+      display: none;
+    }
+    #kata-terakhir {
+      margin-top: 30px;
+      font-size: 24px;
+      color: #ffd1dc;
+      white-space: pre-line;
+      display: none;
+    }
+    canvas#snow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="twinkling"></div>
+  <canvas id="snow"></canvas>  <div class="emoji-container">💫🌟✨💖🌠</div>
+  <div class="typing-container" id="typing"></div>
+  <button id="last-btn">Klik untuk kata terakhir 💌</button>
+  <div id="kata-terakhir"></div>  <audio id="bg-music" loop>
+    <source src="https://dl.sndup.net/qqqz/romantic-acoustic.mp3" type="audio/mpeg">
+  </audio>  <script>
+    const teks = [
+      "Hai kamu yang selalu hadir di pikiranku 💭",
+      "Tau gak, senyummu itu kayak pelangi setelah hujan 🌈",
+      "Kadang aku mikir, kamu tuh nyata apa cuma mimpi indahku? ✨",
+      "Kalau aku punya satu permintaan, aku pengen bareng kamu selamanya 💑"
+    ];
+    const kataTerakhir = `Burung merpati terbang berdua,\nMenari indah di angkasa biru.\nTak perlu janji atau kata,\nYang pasti aku cinta kamu 💖`;
+
+    const typingDiv = document.getElementById("typing");
+    const lastBtn = document.getElementById("last-btn");
+    const kataDiv = document.getElementById("kata-terakhir");
+    const bgMusic = document.getElementById("bg-music");
+
+    let textIndex = 0;
+    let charIndex = 0;
+    let currentText = "";
+
+    function typeWriter() {
+      if (textIndex < teks.length) {
+        if (charIndex < teks[textIndex].length) {
+          currentText += teks[textIndex].charAt(charIndex);
+          typingDiv.textContent = currentText;
+          charIndex++;
+          setTimeout(typeWriter, 100);
+        } else {
+          setTimeout(() => {
+            currentText = "";
+            typingDiv.textContent = "";
+            charIndex = 0;
+            textIndex++;
+            typeWriter();
+          }, 2000);
+        }
+      } else {
+        lastBtn.style.display = "inline-block";
+      }
+    }
+
+    typeWriter();
+
+    lastBtn.addEventListener("click", () => {
+      kataDiv.textContent = kataTerakhir;
+      kataDiv.style.display = "block";
+      lastBtn.style.display = "none";
+      bgMusic.play();
+    });
+
+    // Salju
+    const canvas = document.getElementById("snow");
+    const ctx = canvas.getContext("2d");
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    let flakes = [];
+    for (let i = 0; i < 100; i++) {
+      flakes.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 4 + 1,
+        d: Math.random() * 1 + 1
+      });
+    }
+
+    function drawFlakes() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = "white";
+      ctx.beginPath();
+      for (let i = 0; i < flakes.length; i++) {
+        let f = flakes[i];
+        ctx.moveTo(f.x, f.y);
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2, true);
+      }
+      ctx.fill();
+      moveFlakes();
+    }
+
+    function moveFlakes() {
+      for (let i = 0; i < flakes.length; i++) {
+        let f = flakes[i];
+        f.y += f.d;
+        if (f.y > height) {
+          f.y = 0;
+          f.x = Math.random() * width;
+        }
+      }
+    }
+
+    setInterval(drawFlakes, 33);
+    window.addEventListener("resize", () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+  </script></body>
+</html>
